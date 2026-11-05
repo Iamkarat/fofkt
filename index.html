@@ -24,10 +24,14 @@
         }
 
         body {
+            background-color: #111111;
+        }
+
+        /* Основной экран: шапка и две половины */
+        .main-screen {
             display: flex;
             flex-direction: column;
             height: 100vh;
-            background-color: #111111;
         }
 
         /* Шапка */
@@ -224,7 +228,8 @@
 
         /* Мобильная адаптация */
         @supports (height: 100dvh) {
-            body {
+            .main-screen,
+            .intro {
                 height: 100dvh;
             }
         }
@@ -240,9 +245,30 @@
                 aspect-ratio: 1;
             }
         }
+
+        /* Видео на весь экран над страницей */
+        .intro {
+            height: 100vh;
+            background-color: #000000;
+            overflow: hidden;
+        }
+
+        .intro video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Видео на весь экран -->
+    <section class="intro">
+        <video id="introVideo" muted playsinline autoplay loop preload="auto" poster="video/intro-poster.jpg"></video>
+    </section>
+
+    <div class="main-screen">
 
     <!-- Шапка профиля -->
     <header class="profile-header">
@@ -271,6 +297,20 @@
     </div>
 
     </div>
+
+    </div>
+
+    <script>
+        // На телефоне — лёгкая версия видео
+        (function () {
+            var video = document.getElementById('introVideo');
+            video.src = window.matchMedia('(max-width: 768px)').matches
+                ? 'video/intro-mobile.mp4'
+                : 'video/intro.mp4';
+            var playing = video.play();
+            if (playing && playing.catch) playing.catch(function () {});
+        })();
+    </script>
 
 </body>
 </html>
